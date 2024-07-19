@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block content %}
+<h3>{{ city }}</h3>
+{% for date, variables in weather.items() %}
+<table border="1" align="center">
+  <thead>
+    <tr>
+      <th>{{ date }}</th>
+      {% for v in variables %}
+      <th>{{ v['time'] }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Температура (°C)</td>
+      {% for v in variables %}
+      <td>{{ v['temperature_2m'] }}°C</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td>Относительная влажность (%)</td>
+      {% for v in variables %}
+      <td>{{ v['relative_humidity_2m'] }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td>Скорость ветра (м/с)</td>
+      {% for v in variables %}
+      <td>{{ v['wind_speed_10m'] }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td>Код погоды</td>
+      {% for v in variables %}
+      <td>{{ v['weather_code'] }}</td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+<br>
+{% endfor %}
+{% endblock %}

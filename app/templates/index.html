@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Weather forecast</title>
+  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  <h1>Поиск погоды</h1>
+  <div class="search">
+    <form action="/weather" method="GET">
+      <input type="text" name="city" placeholder="Введите город...">
+      <button type="submit"></button>
+    </form>
+  </div>
+  <div id="content">{% block content %}å{% endblock %}</div>
+</body>
+
+</html>

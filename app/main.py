@@ -1,32 +1,33 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from geopy.adapters import AioHTTPAdapter
-from geopy.geocoders import Nominatim
-import httpx
+from jinja2 import Environment
+from api.geocode import get_coordinates
+from api.weather import get_weather_forecast
 
 app = FastAPI()
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["zip"] = zip
+
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("base.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/weather")
-async def get_weather(city: str = None):
-    # Здесь вы можете добавить логику для получения широты и долготы из строки поиска с использованием вашего метода или API геокодирования
-    async with Nominatim(user_agent="WebWeatherForecastApp", adapter_factory=AioHTTPAdapter,) as geolocator:
-        location = await geolocator.geocode(city)
-        if location:
-            latitude = location.latitude
-            longitude = location.longitude
 
-            url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m"
-            async with httpx.AsyncClient() as client:
-                    response = await client.get(url)
-                    return {"city": city, "weather": response.json()}
-        else:
-            # return {"error": "Геоданные не найдены для указанного города"}
-            return RedirectResponse(url="/")
+@app.get("/weather", response_class=HTMLResponse)
+async def get_weather(request: Request, city: str = None):
+    coordinates = await get_coordinates(city)
+    if not coordinates:
+        raise HTTPException(status_code=404, detail="Location not found")
+        # return RedirectResponse(url="/")
+    weather = await get_weather_forecast(
+        coordinates["latitude"], coordinates["longitude"]
+    )
+    # return weather
+    return templates.TemplateResponse(
+        "forecast.html",
+        {"request": request, "city": city, "weather": weather},
+    )
