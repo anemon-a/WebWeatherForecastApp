@@ -19,7 +19,7 @@ WebWeatherForecastApp - это веб-приложение, которое по�
 2. Склонируйте репозиторий и перейдите в директорию проекта:
 
     ```bash
-    git clone <URL вашего репозитория>
+    git clone https://github.com/anemon-a/WebWeatherForecastApp.git
     cd WebWeatherForecastApp
     ```
 
