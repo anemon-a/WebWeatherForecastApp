@@ -28,8 +28,8 @@
 
 1. **Клонирование репозитория:**
     ```bash
-    git clone https://github.com/your-repo/weather-forecast-app.git
-    cd weather-forecast-app
+    git clone https://github.com/anemon-a/WebWeatherForecastApp.git
+    cd WebWeatherForecastApp
     ```
 
 2. **Запуск Docker контейнеров:**
