@@ -1,0 +1,59 @@
+{% extends "index.html" %}
+{% block content %}
+<h3>Прогноз погоды для города: {{ city }}</h3>
+{% for date, variables in weather.items() %}
+<table class="forecast" align="center">
+  <thead>
+    <tr>
+      <th colspan="25">{{ date }}</th>
+    </tr>
+    <tr>
+      <th></th>
+      {% for v in variables %}
+      <th>{{ v['time'] }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+
+    <td></td>
+    {% for v in variables %}
+    {% set weather_code = v['weather_code'] %}
+    <td>
+      <img src="{{ url_for('static', path='images/' + weather_icons[weather_code][1]) }}" alt="{{ weather_code }}" />
+    </td>
+    {% endfor %}
+    </tr>
+    <td></td>
+    {% for v in variables %}
+    {% set weather_code = v['weather_code'] %}
+    <td>
+      {{weather_icons[weather_code][0]}}
+    </td>
+    {% endfor %}
+    </tr>
+    <tr>
+      <td class="first_col">Температура (°C)</td>
+      {% for v in variables %}
+      <td>{{ v['temperature_2m'] }}°C</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td class="first_col">Относительная влажность (%)</td>
+      {% for v in variables %}
+      <td>{{ v['relative_humidity_2m'] }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td class="first_col">Скорость ветра (м/с)</td>
+      {% for v in variables %}
+      <td>{{ v['wind_speed_10m'] }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+
+  </tbody>
+</table>
+<br>
+{% endfor %}
+{% endblock %}
